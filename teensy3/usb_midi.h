@@ -82,7 +82,7 @@ extern void (*usb_midi_handlePitchChange)(uint8_t ch, int pitch);
 extern void (*usb_midi_handleSysEx)(const uint8_t *data, uint16_t length, uint8_t complete);
 extern void (*usb_midi_handleRealTimeSystem)(uint8_t rtb);
 extern void (*usb_midi_handleTimeCodeQuarterFrame)(uint16_t data);
-extern void (*usb_midi_handleSongPositionPointer)(uint16_t SPP14bit);
+extern void (*usb_midi_handleSongPositionPointer)(uint16_t SPP14bit); //added by Tenkai Kariya tenkai@zetaohm.com 11/2017
 
 #ifdef __cplusplus
 }

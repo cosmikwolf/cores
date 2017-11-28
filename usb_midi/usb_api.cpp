@@ -295,6 +295,7 @@ bool usb_midi_class::read(uint8_t channel)
 
 	}
 	if (type1 ==0x03 && b1 == 0xF2) { //Added by Ben Milner 8/2017
+		//https://forum.pjrc.com/threads/46093-Teensy-USB-MIDI-adding-Song-Position-Pointer-(SPP)-to-core-library?styleid=1
 	  msg_type = 9; //Song position pointer will show up as message type 9, when using the function usbMIDI.getType
 	                 //Song position pointer is 14 bit number, made from byte 2 and 3 of the midi message.
 	  if (handleSongPositionPointer) (*handleSongPositionPointer) ((b2 & 0x7F) | ((b3 & 0x7F) << 7)); //number passed on to Handle function is the assembled 14 bit number
