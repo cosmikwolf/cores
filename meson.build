@@ -146,7 +146,7 @@ teensy4_core_src = [
     'teensy4/yield.cpp',
 ]
 
-teensy_core = meson.get_cross_property('teensy_core') # Which teensy core treee to use
+teensy_core = meson.get_external_property('teensy_core', 'teensy3') # Which teensy core treee to use
 
 teensy_core_src =  []
 teensy_core_incdir = []
@@ -173,7 +173,7 @@ teensy_core_dep = declare_dependency(
 )
 
 ldscript = join_paths(meson.current_source_dir(), teensy_core,
-                      meson.get_cross_property('teensy_mcu') + '.ld')
+                      meson.get_external_property('teensy_mcu', 'mk20dx256') + '.ld')
 
 
 ### Teensy USB RawHID ###
