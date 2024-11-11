@@ -8,6 +8,8 @@ nullptr	LITERAL1
 noexcept	LITERAL1
 static_assert	LITERAL1
 thread_local	LITERAL1
+size_t	LITERAL1
+uintptr_t	LITERAL1
 
 # teensy specific functions
 elapsedMillis	LITERAL1
@@ -23,21 +25,33 @@ analogWriteFrequency	KEYWORD2
 touchRead	KEYWORD2
 Teensy3Clock	KEYWORD2
 IntervalTimer	KEYWORD2
+CrashReport	KEYWORD1
+breadcrumb	KEYWORD2
 printf	KEYWORD2
 digitalWriteFast	KEYWORD2
 digitalReadFast	KEYWORD2
+digitalToggleFast	KEYWORD2
+digitalToggle	KEYWORD2
 transmitterEnable	KEYWORD2
 attachRts	KEYWORD2
 attachCts	KEYWORD2
 PROGMEM	LITERAL1
+FLASHMEM	LITERAL1
 DMAMEM	LITERAL1
+EXTMEM	LITERAL1
 FASTRUN	LITERAL1
 Serial4	KEYWORD1
 Serial5	KEYWORD1
 Serial6	KEYWORD1
+Serial7	KEYWORD1
+Serial8	KEYWORD1
+SerialUSB1	KEYWORD1
+SerialUSB2	KEYWORD1
 setRX	KEYWORD2
 setTX	KEYWORD2
 write9bit	KEYWORD2
+addMemoryForRead	KEYWORD2
+addMemoryForWrite	KEYWORD2
 clear	KEYWORD2
 EventResponder	LITERAL1
 EventResponderRef	LITERAL1
@@ -51,9 +65,18 @@ getContext	KEYWORD2
 waitForEvent	KEYWORD2
 MillisTimer	LITERAL1
 beginRepeating	KEYWORD2
+delayNanoseconds	KEYWORD2
+extmem_malloc	KEYWORD2
+extmem_free	KEYWORD2
+extmem_calloc	KEYWORD2
+extmem_realloc	KEYWORD2
+strcasecmp	KEYWORD2
+DateTimeFields	LITERAL1
+breakTime	KEYWORD2
+makeTime	KEYWORD2
 
-# removed by Arduino 1.0, but still in Teensyduino
-BYTE	LITERAL1
+# removed by Arduino 1.0, now also removed from Teensyduino
+#BYTE	LITERAL1
 
 # Arduino constants
 A0	LITERAL1
@@ -95,6 +118,9 @@ analogInputToDigitalPin	KEYWORD2
 digitalPinHasPWM	KEYWORD2
 NOT_AN_INTERRUPT	LITERAL1
 digitalPinToInterrupt	KEYWORD2
+FILE_READ	LITERAL1
+FILE_WRITE	LITERAL1
+FILE_WRITE_BEGIN	LITERAL1
 
 # HardwareSerial modes
 SERIAL_7E1	LITERAL1
@@ -431,14 +457,41 @@ releaseReadOnly	KEYWORD2
 usbMIDI	KEYWORD1
 sendNoteOff	KEYWORD2
 sendNoteOn	KEYWORD2
+sendAfterTouchPoly	KEYWORD2
 sendPolyPressure	KEYWORD2
 sendControlChange	KEYWORD2
 sendProgramChange	KEYWORD2
 sendAfterTouch	KEYWORD2
 sendPitchBend	KEYWORD2
 sendSysEx	KEYWORD2
+sendRealTime	KEYWORD2
+sendClock	KEYWORD2
+sendStart	KEYWORD2
+sendStop	KEYWORD2
+sendTick	KEYWORD2
+sendContinue	KEYWORD2
+sendActiveSensing	KEYWORD2
+sendSystemReset	KEYWORD2
+sendTimeCodeQuarterFrame	KEYWORD2
+sendSongPosition	KEYWORD2
+sendSongSelect	KEYWORD2
+sendTuneRequest	KEYWORD2
+beginRpn	KEYWORD2
+sendRpnValue	KEYWORD2
+sendRpnValue	KEYWORD2
+sendRpnIncrement	KEYWORD2
+sendRpnDecrement	KEYWORD2
+endRpn	KEYWORD2
+beginNrpn	KEYWORD2
+sendNrpnValue	KEYWORD2
+sendNrpnValue	KEYWORD2
+sendNrpnIncrement	KEYWORD2
+sendNrpnDecrement	KEYWORD2
+endNrpn	KEYWORD2
+send	KEYWORD2
 analog2velocity	KEYWORD2
 getType	KEYWORD2
+getCable	KEYWORD2
 getChannel	KEYWORD2
 getData1	KEYWORD2
 getData2	KEYWORD2
@@ -450,7 +503,6 @@ setHandleControlChange	KEYWORD2
 setHandleProgramChange	KEYWORD2
 setHandleAfterTouch	KEYWORD2
 setHandlePitchChange	KEYWORD2
-setHandlePitchChange	KEYWORD2
 NoteOff	LITERAL1
 NoteOn	LITERAL1
 AfterTouchPoly	LITERAL1
@@ -459,6 +511,19 @@ ProgramChange	LITERAL1
 AfterTouchChannel	LITERAL1
 PitchBend	LITERAL1
 SystemExclusive	LITERAL1
+TimeCodeQuarterFrame	LITERAL1
+SongPosition	LITERAL1
+SongSelect	LITERAL1
+TuneRequest	LITERAL1
+Clock	LITERAL1
+Start	LITERAL1
+Continue	LITERAL1
+Stop	LITERAL1
+ActiveSensing	LITERAL1
+SystemReset	LITERAL1
+midiEventPacket_t	LITERAL1
+MidiUSB	KEYWORD1
+sendMIDI	KEYWORD2
 
 # USB RawHID
 RawHID	KEYWORD1
@@ -471,6 +536,8 @@ FlightSimCommand	KEYWORD2
 FlightSimInteger	KEYWORD2
 FlightSimFloat	KEYWORD2
 FlightSimElapsedFrames	KEYWORD2
+FlightSimData	KEYWORD2
+FlightSimEvent	KEYWORD2
 onChange	KEYWORD2
 update	KEYWORD2
 isEnabled	KEYWORD2

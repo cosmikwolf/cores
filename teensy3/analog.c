@@ -40,8 +40,12 @@ static uint8_t analog_reference_internal = 0;
 // the alternate clock is connected to OSCERCLK (16 MHz).
 // datasheet says ADC clock should be 2 to 12 MHz for 16 bit mode
 // datasheet says ADC clock should be 1 to 18 MHz for 8-12 bit mode
-
-#if F_BUS == 120000000
+#if F_BUS == 128000000
+  #define ADC_CFG1_16BIT  ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1) // 8 MHz
+  #define ADC_CFG1_12BIT  ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // 16 MHz
+  #define ADC_CFG1_10BIT  ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // 16 MHz
+  #define ADC_CFG1_8BIT   ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // 16 MHz
+#elif F_BUS == 120000000
   #define ADC_CFG1_16BIT  ADC_CFG1_ADIV(3) + ADC_CFG1_ADICLK(1) // 7.5 MHz
   #define ADC_CFG1_12BIT  ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // 15 MHz
   #define ADC_CFG1_10BIT  ADC_CFG1_ADIV(2) + ADC_CFG1_ADICLK(1) // 15 MHz
@@ -127,7 +131,7 @@ static uint8_t analog_reference_internal = 0;
   #define ADC_CFG1_10BIT  ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0) // 2 MHz
   #define ADC_CFG1_8BIT   ADC_CFG1_ADIV(0) + ADC_CFG1_ADICLK(0) // 2 MHz
 #else
-#error "F_BUS must be 120, 108, 96, 90, 80, 72, 64, 60, 56, 54, 48, 40, 36, 24, 4 or 2 MHz"
+#error "F_BUS must be 128, 120, 108, 96, 90, 80, 72, 64, 60, 56, 54, 48, 40, 36, 24, 4 or 2 MHz"
 #endif
 
 void analog_init(void)
@@ -228,11 +232,11 @@ static void wait_for_cal(void)
 	//serial_print("wait_for_cal\n");
 #if defined(HAS_KINETIS_ADC0) && defined(HAS_KINETIS_ADC1)
 	while ((ADC0_SC3 & ADC_SC3_CAL) || (ADC1_SC3 & ADC_SC3_CAL)) {
-		// wait
+		yield(); // wait
 	}
 #elif defined(HAS_KINETIS_ADC0)
 	while (ADC0_SC3 & ADC_SC3_CAL) {
-		// wait
+		yield(); // wait
 	}
 #endif
 	__disable_irq();
@@ -449,6 +453,8 @@ int analogRead(uint8_t pin)
 	if (channel & 0x80) goto beginADC1;
 #endif
 
+	// This interrupt disable stuff is meant to allow use of
+	// analogRead() in both main program and interrupts.
 	__disable_irq();
 startADC0:
 	//serial_print("startADC0\n");
@@ -477,7 +483,7 @@ startADC0:
 		// be restarted.
 		if (!analogReadBusyADC0) goto startADC0;
 		__enable_irq();
-		yield();
+		yield(); // TODO: what happens if yield-called code uses analogRead()
 	}
 
 #ifdef HAS_KINETIS_ADC1
@@ -524,8 +530,7 @@ void analogWriteDAC0(int val)
 	} else {
 		DAC0_C0 = DAC_C0_DACEN | DAC_C0_DACRFS; // 3.3V VDDA is DACREF_2
 	}
-	if (val < 0) val = 0;  // TODO: saturate instruction?
-	else if (val > 4095) val = 4095;
+	__asm__ ("usat    %[value], #12, %[value]\n\t" : [value] "+r" (val));  // 0 <= val <= 4095
 
 	*(volatile aliased_int16_t *)&(DAC0_DAT0L) = val;
 #elif defined(__MKL26Z64__)
@@ -554,8 +559,7 @@ void analogWriteDAC1(int val)
 	} else {
 		DAC1_C0 = DAC_C0_DACEN | DAC_C0_DACRFS; // 3.3V VDDA is DACREF_2
 	}
-	if (val < 0) val = 0;  // TODO: saturate instruction?
-	else if (val > 4095) val = 4095;
+	__asm__ ("usat    %[value], #12, %[value]\n\t" : [value] "+r" (val));  // 0 <= val <= 4095
 
 	*(volatile aliased_int16_t *)&(DAC1_DAT0L) = val;
 }

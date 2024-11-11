@@ -42,6 +42,7 @@ volatile uint8_t usb_seremu_transmit_flush_timer=0;
 static usb_packet_t *rx_packet=NULL;
 static usb_packet_t *tx_packet=NULL;
 static volatile uint8_t tx_noautoflush=0;
+volatile uint8_t usb_seremu_online=0;
 
 #define TRANSMIT_FLUSH_TIMEOUT	5   /* in milliseconds */
 
@@ -95,7 +96,10 @@ int usb_seremu_available(void)
 
 	if (!rx_packet) {
 		if (usb_configuration) rx_packet = usb_rx(SEREMU_RX_ENDPOINT);
-		if (!rx_packet) return 0;
+		if (!rx_packet) {
+			yield();
+			return 0;
+		}
 	}
 	len = rx_packet->len;
 	i = rx_packet->index;
@@ -107,6 +111,7 @@ int usb_seremu_available(void)
 	if (count == 0) {
 		usb_free(rx_packet);
 		rx_packet = NULL;
+		yield();
 	}
 	return count;
 }
@@ -138,8 +143,9 @@ void usb_seremu_flush_input(void)
 // too short, we risk losing data during the stalls that are common with ordinary desktop
 // software.  If it's too long, we stall the user's program when no software is running.
 #define TX_TIMEOUT_MSEC 30
-
-#if F_CPU == 240000000
+#if F_CPU == 256000000
+  #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1706)
+#elif F_CPU == 240000000
   #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1600)
 #elif F_CPU == 216000000
   #define TX_TIMEOUT (TX_TIMEOUT_MSEC * 1440)

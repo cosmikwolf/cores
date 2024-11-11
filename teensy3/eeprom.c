@@ -28,6 +28,14 @@
  * SOFTWARE.
  */
 
+// To configure the EEPROM size, edit E2END in avr/eeprom.h.
+//
+// Do *NOT* edit EEPROM_SIZE in this file.  It will automatically
+// change based on your changes to E2END in avr/eeprom.h.
+//
+// Generally you should avoid editing this code, unless you really
+// know what you're doing.
+
 #include "kinetis.h"
 #include <avr/eeprom.h>
 //#include "HardwareSerial.h"
@@ -499,7 +507,7 @@ void eeprom_write_byte(uint8_t *addr, uint8_t data)
 			}
 			flashaddr += 2;
 		}
-		flashend = flashaddr;
+		flashend = flashaddr - 2;
 		if ((flashaddr & 2)) {
 			val |= 0xFFFF0000;
 			flash_write(do_flash_cmd, flashaddr, val);

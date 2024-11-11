@@ -35,7 +35,18 @@
 
 #ifdef KINETISK
 
-#if F_BUS == 120000000
+// The preferred way to set SPI speed is with SPI.beginTransaction()
+
+#if F_BUS == 128000000
+#define HAS_SPIFIFO
+#define SPI_CLOCK_24MHz   (SPI_CTAR_PBR(1) | SPI_CTAR_BR(0))		    //(128 / 3) * ((1+0)/2) = 21.3MHz
+#define SPI_CLOCK_16MHz   (SPI_CTAR_PBR(0) | SPI_CTAR_BR(2))                //(128 / 2) * ((1+0)/4)
+#define SPI_CLOCK_12MHz   (SPI_CTAR_PBR(1) | SPI_CTAR_BR(2))                //(128 / 3) * ((1+0)/4) = 10.6 MHz
+#define SPI_CLOCK_8MHz    (SPI_CTAR_PBR(0) | SPI_CTAR_BR(6)) 		    //(128 / 2) * ((1+0)/8) 
+#define SPI_CLOCK_6MHz    (SPI_CTAR_PBR(1) | SPI_CTAR_BR(6))                //(128 / 3) * ((1+0)/8) = 5.3 MHz
+#define SPI_CLOCK_4MHz    (SPI_CTAR_PBR(3) | SPI_CTAR_BR(6))                //(128 / 5) * ((1+0)/8) = 3.2MHz
+
+#elif F_BUS == 120000000
 #define HAS_SPIFIFO
 #define SPI_CLOCK_24MHz   (SPI_CTAR_PBR(3) | SPI_CTAR_BR(0) | SPI_CTAR_DBR) //(120 / 5) * ((1+1)/2)
 #define SPI_CLOCK_16MHz   (SPI_CTAR_PBR(0) | SPI_CTAR_BR(2))                //(120 / 2) * ((1+0)/4) = 15 MHz
@@ -226,7 +237,7 @@ for $i (2, 3, 5, 7) {
 class SPIFIFOclass
 {
 public:
-	inline void begin(uint8_t pin, uint32_t speed, uint32_t mode=SPI_MODE0) __attribute__((always_inline)) {
+	inline void begin(uint8_t pin, uint32_t speed, uint32_t mode=SPI_MODE0) __attribute__((always_inline, deprecated)) {
 		uint32_t p, ctar = speed;
 		SIM_SCGC6 |= SIM_SCGC6_SPI0;
 

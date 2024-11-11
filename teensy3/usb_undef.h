@@ -41,8 +41,8 @@
 #ifdef ENDPOINT_UNUSED
 #undef ENDPOINT_UNUSED
 #endif
-#ifdef ENDPOINT_TRANSIMIT_ONLY
-#undef ENDPOINT_TRANSIMIT_ONLY
+#ifdef ENDPOINT_TRANSMIT_ONLY
+#undef ENDPOINT_TRANSMIT_ONLY
 #endif
 #ifdef ENDPOINT_RECEIVE_ONLY
 #undef ENDPOINT_RECEIVE_ONLY
@@ -55,6 +55,9 @@
 #endif
 #ifdef PRODUCT_ID
 #undef PRODUCT_ID
+#endif
+#ifdef BCD_DEVICE
+#undef BCD_DEVICE
 #endif
 #ifdef DEVICE_CLASS
 #undef DEVICE_CLASS
@@ -106,6 +109,54 @@
 #endif
 #ifdef CDC_TX_SIZE
 #undef CDC_TX_SIZE
+#endif
+#ifdef CDC2_STATUS_INTERFACE
+#undef CDC2_STATUS_INTERFACE
+#endif
+#ifdef CDC2_DATA_INTERFACE
+#undef CDC2_DATA_INTERFACE
+#endif
+#ifdef CDC2_ACM_ENDPOINT
+#undef CDC2_ACM_ENDPOINT
+#endif
+#ifdef CDC2_RX_ENDPOINT
+#undef CDC2_RX_ENDPOINT
+#endif
+#ifdef CDC2_TX_ENDPOINT
+#undef CDC2_TX_ENDPOINT
+#endif
+#ifdef CDC2_ACM_SIZE
+#undef CDC2_ACM_SIZE
+#endif
+#ifdef CDC2_RX_SIZE
+#undef CDC2_RX_SIZE
+#endif
+#ifdef CDC2_TX_SIZE
+#undef CDC2_TX_SIZE
+#endif
+#ifdef CDC3_STATUS_INTERFACE
+#undef CDC3_STATUS_INTERFACE
+#endif
+#ifdef CDC3_DATA_INTERFACE
+#undef CDC3_DATA_INTERFACE
+#endif
+#ifdef CDC3_ACM_ENDPOINT
+#undef CDC3_ACM_ENDPOINT
+#endif
+#ifdef CDC3_RX_ENDPOINT
+#undef CDC3_RX_ENDPOINT
+#endif
+#ifdef CDC3_TX_ENDPOINT
+#undef CDC3_TX_ENDPOINT
+#endif
+#ifdef CDC3_ACM_SIZE
+#undef CDC3_ACM_SIZE
+#endif
+#ifdef CDC3_RX_SIZE
+#undef CDC3_RX_SIZE
+#endif
+#ifdef CDC3_TX_SIZE
+#undef CDC3_TX_SIZE
 #endif
 #ifdef SEREMU_INTERFACE
 #undef SEREMU_INTERFACE
@@ -168,6 +219,15 @@
 #undef CDC_IAD_DESCRIPTOR
 #endif
 #ifdef MIDI_INTERFACE
+#undef MIDI_INTERFACE
+#endif
+#ifdef MIDI_NUM_CABLES
+#undef MIDI_NUM_CABLES
+#endif
+#ifdef MIDI_INTERFACE_JACK_PAIR
+#undef MIDI_INTERFACE_JACK_PAIR
+#endif
+#ifdef MIDI_TX_ENDPOINT
 #undef MIDI_TX_ENDPOINT
 #endif
 #ifdef MIDI_TX_SIZE

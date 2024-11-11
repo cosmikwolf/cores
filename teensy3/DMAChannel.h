@@ -380,6 +380,7 @@ protected:
 	DMABaseClass() {}
 
 	static inline void copy_tcd(TCD_t *dst, const TCD_t *src) {
+		dst->CSR = 0;
 		const uint32_t *p = (const uint32_t *)src;
 		uint32_t *q = (uint32_t *)dst;
 		uint32_t t1, t2, t3, t4;
@@ -534,6 +535,12 @@ public:
 		NVIC_ENABLE_IRQ(IRQ_DMA_CH0 + channel);
 	}
 
+	void attachInterrupt(void (*isr)(void), uint8_t prio) {
+		_VectorsRam[channel + IRQ_DMA_CH0 + 16] = isr;
+		NVIC_ENABLE_IRQ(IRQ_DMA_CH0 + channel);
+		NVIC_SET_PRIORITY(IRQ_DMA_CH0 + channel, prio);
+	}
+	
 	void detachInterrupt(void) {
 		NVIC_DISABLE_IRQ(IRQ_DMA_CH0 + channel);
 	}
@@ -784,7 +791,7 @@ public:
 		uint32_t mod = len2mod(len);
 		if (mod == 0) return;
 		CFG->DAR = p;
-		CFG->DCR = (CFG->DCR & 0xF0F0F0FF) | DMA_DCR_DSIZE(1) | DMA_DCR_DINC
+		CFG->DCR = (CFG->DCR & 0xF0F0F0FF) | DMA_DCR_DSIZE(2) | DMA_DCR_DINC
 			| DMA_DCR_DMOD(mod);
 		CFG->DSR_BCR = len;
 	}
@@ -798,7 +805,7 @@ public:
 		uint32_t mod = len2mod(len);
 		if (mod == 0) return;
 		CFG->DAR = p;
-		CFG->DCR = (CFG->DCR & 0xF0F0F0FF) | DMA_DCR_DSIZE(1) | DMA_DCR_DINC
+		CFG->DCR = (CFG->DCR & 0xF0F0F0FF) | DMA_DCR_DSIZE(0) | DMA_DCR_DINC
 			| DMA_DCR_DMOD(mod);
 		CFG->DSR_BCR = len;
 	}
@@ -811,11 +818,11 @@ public:
 	void transferSize(unsigned int len) {
 		uint32_t dcr = CFG->DCR & 0xF0C8FFFF;
 		if (len == 4) {
-			CFG->DCR = dcr | DMA_DCR_DSIZE(0) | DMA_DCR_DSIZE(0);
+			CFG->DCR = dcr | DMA_DCR_SSIZE(0) | DMA_DCR_DSIZE(0);
 		} else if (len == 2) {
-			CFG->DCR = dcr | DMA_DCR_DSIZE(2) | DMA_DCR_DSIZE(2);
+			CFG->DCR = dcr | DMA_DCR_SSIZE(2) | DMA_DCR_DSIZE(2);
 		} else {
-			CFG->DCR = dcr | DMA_DCR_DSIZE(1) | DMA_DCR_DSIZE(1);
+			CFG->DCR = dcr | DMA_DCR_SSIZE(1) | DMA_DCR_DSIZE(1);
 		}
 	}
 
@@ -1034,7 +1041,13 @@ public:
 		_VectorsRam[channel + IRQ_DMA_CH0 + 16] = isr;
 		NVIC_ENABLE_IRQ(IRQ_DMA_CH0 + channel);
 	}
-
+	
+	void attachInterrupt(void (*isr)(void), uint8_t prio) {
+		_VectorsRam[channel + IRQ_DMA_CH0 + 16] = isr;
+		NVIC_ENABLE_IRQ(IRQ_DMA_CH0 + channel);
+		NVIC_SET_PRIORITY(IRQ_DMA_CH0 + channel, prio);
+	}
+	
 	void detachInterrupt(void) {
 		NVIC_DISABLE_IRQ(IRQ_DMA_CH0 + channel);
 	}

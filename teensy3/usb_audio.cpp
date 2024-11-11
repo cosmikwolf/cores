@@ -28,10 +28,8 @@
  * SOFTWARE.
  */
 
+#include <Arduino.h>
 #include "usb_dev.h"
-#include "usb_audio.h"
-#include "HardwareSerial.h"
-#include <string.h> // for memcpy()
 
 #ifdef AUDIO_INTERFACE // defined by usb_dev.h -> usb_desc.h
 #if F_CPU >= 20000000
@@ -406,8 +404,8 @@ int usb_audio_get_feature(void *stp, uint8_t *data, uint32_t *datalen)
 					data[1] = 0;
 				}
 				else if (setup.bRequest==0x83) { // GET_MAX
-					data[0] = FEATURE_MAX_VOLUME & 0xFF;  // max level, for range of 0 to MAX
-					data[1] = (FEATURE_MAX_VOLUME>>8) & 0x0F;
+					data[0] = FEATURE_MAX_VOLUME;  // max level, for range of 0 to MAX
+					data[1] = 0;
 				}
 				else if (setup.bRequest==0x84) { // GET_RES
 					data[0] = 1; // increment vol by by 1
@@ -436,7 +434,7 @@ int usb_audio_set_feature(void *stp, uint8_t *buf)
 			}
 			else if (setup.bCS==0x02) { // volume
 				if (setup.bRequest==0x01) { // SET_CUR
-					AudioInputUSB::features.volume = buf[0] + (buf[1]<<8);
+					AudioInputUSB::features.volume = buf[0];
 					AudioInputUSB::features.change = 1;
 					return 1;
 				}
