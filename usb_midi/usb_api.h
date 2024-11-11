@@ -282,7 +282,9 @@ public:
 	void setHandleRealTimeSystem(void (*fptr)(uint8_t realtimebyte)) {
 		// type: 0xF8-0xFF - if more specific handler not configured
 		handleRealTimeSystem = fptr;
+
 	}
+
 private:
 	void send_raw(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3);
 	uint32_t midiusb_available();

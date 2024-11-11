@@ -192,6 +192,7 @@ class usb_midi_class
 				break;
 		}
 	}
+
 	void sendClock(uint8_t cable=0) {
 		sendRealTime(0xF8, cable);
 	}
@@ -228,6 +229,7 @@ class usb_midi_class
 	void beginRpn(uint16_t number, uint8_t channel, uint8_t cable=0) __attribute__((always_inline)) {
 		sendControlChange(101, number >> 7, channel, cable);
 		sendControlChange(100, number, channel, cable);
+
 	}
 	void sendRpnValue(uint16_t value, uint8_t channel, uint8_t cable=0) __attribute__((always_inline)) {
 		sendControlChange(6, value >> 7, channel, cable);
@@ -410,4 +412,3 @@ extern usb_midi_class usbMIDI;
 #endif // MIDI_INTERFACE
 
 #endif // USBmidi_h_
-

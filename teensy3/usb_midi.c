@@ -65,7 +65,6 @@ void (*usb_midi_handleActiveSensing)(void) = NULL;
 void (*usb_midi_handleSystemReset)(void) = NULL;
 void (*usb_midi_handleRealTimeSystem)(uint8_t rtb) = NULL;
 
-
 // Maximum number of transmit packets to queue so we don't starve other endpoints for memory
 #define TX_PACKET_LIMIT 6
 static usb_packet_t *rx_packet=NULL;
