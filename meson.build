@@ -51,8 +51,11 @@ teensy3_core_src = [
   'teensy3/analog.c',
   'teensy3/AudioStream.cpp',
   'teensy3/avr_emulation.cpp',
+  'teensy3/CrashReport.cpp',
   'teensy3/DMAChannel.cpp',
   'teensy3/eeprom.c',
+  'teensy3/EventResponder.cpp',
+  'teensy3/HardwareSerial.cpp',
   'teensy3/HardwareSerial1.cpp',
   'teensy3/HardwareSerial2.cpp',
   'teensy3/HardwareSerial3.cpp',
@@ -64,13 +67,12 @@ teensy3_core_src = [
   'teensy3/keylayouts.c',
   'teensy3/main.cpp',
   'teensy3/math_helper.c',
-  'teensy3/memcpy-armv7m.S',
-  'teensy3/memset.S',
   'teensy3/mk20dx128.c',
   'teensy3/new.cpp',
   'teensy3/nonstd.c',
   'teensy3/pins_teensy.c',
   'teensy3/Print.cpp',
+  'teensy3/ser_print.c',
   'teensy3/serial1.c',
   'teensy3/serial2.c',
   'teensy3/serial3.c',
@@ -78,8 +80,17 @@ teensy3_core_src = [
   'teensy3/serial5.c',
   'teensy3/serial6.c',
   'teensy3/serial6_lpuart.c',
-  'teensy3/ser_print.c',
+  'teensy3/serialEvent.cpp',
+  'teensy3/serialEvent1.cpp',
+  'teensy3/serialEvent2.cpp',
+  'teensy3/serialEvent3.cpp',
+  'teensy3/serialEvent4.cpp',
+  'teensy3/serialEvent5.cpp',
+  'teensy3/serialEvent6.cpp',
+  'teensy3/serialEventUSB1.cpp',
+  'teensy3/serialEventUSB2.cpp',
   'teensy3/Stream.cpp',
+  'teensy3/Time.cpp',
   'teensy3/Tone.cpp',
   'teensy3/touch.c',
   'teensy3/usb_audio.cpp',
@@ -96,6 +107,8 @@ teensy3_core_src = [
   'teensy3/usb_rawhid.c',
   'teensy3/usb_seremu.c',
   'teensy3/usb_serial.c',
+  'teensy3/usb_serial2.c',
+  'teensy3/usb_serial3.c',
   'teensy3/usb_touch.c',
   'teensy3/WMath.cpp',
   'teensy3/WString.cpp',
@@ -176,17 +189,9 @@ teensy_core_lib = static_library(
   include_directories: include_directories(teensy_core_incdir),
 )
 
-libcpp = subproject('libcpp')
-libcxx_full_dep = libcpp.get_variable('libcxx_full_dep')
-libcxx_full_native_dep = libcpp.get_variable('libcxx_full_native_dep')
-libcxx_header_include_dep = libcpp.get_variable('libcxx_header_include_dep')
-libcxx_native_header_include_dep = libcpp.get_variable('libcxx_native_header_include_dep')
-
 teensy_core_dep = declare_dependency(
   link_with: teensy_core_lib,
-  dependencies: libcxx_full_dep,
   include_directories: include_directories(teensy_core_incdir),
-
 )
 
 ldscript = join_paths(
